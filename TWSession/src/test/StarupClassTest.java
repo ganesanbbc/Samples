@@ -120,5 +120,17 @@ class StarupClassTest {
         assertThat(mSeats.get(1).getName(), is("R2H"));
     }
 
+    @Test
+    void thatBookedMiddle3SideSeatWhenRequesting3Seats() {
+        int requiredSeat = 3;
+        airLineBooking.allocateSeat(1);
+        airLineBooking.allocateSeat(1);
+        airLineBooking.allocateSeat(1);
+        airLineBooking.allocateSeat(requiredSeat);
+
+        System.out.println(mSeats);
+        assertThat(mSeats.size(), is(requiredSeat));
+    }
+
 
 }

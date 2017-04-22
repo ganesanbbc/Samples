@@ -33,8 +33,29 @@ public class SeatAllocator implements Allocator {
             if (chooseSignleSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
         } else if (requiredSeat == 2) {
             if (sideSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
+        } else if (requiredSeat == 3) {
+            if (allocateMiddleSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
+
         }
         return allocatedSeats;
+    }
+
+    private boolean allocateMiddleSeat(int requiredSeat, List<Seat> allocatedSeats) {
+
+        for (List<Seat> seat : seatProvider.getSeat()) {
+            for (int i = 0; i < seat.size(); i++) {
+
+                Seat seat1 = seat.get(i);
+                if (!seat1.isAllocated() && !seat1.isSideSeat()) {
+                    allocatedSeats.add(seat1);
+                }
+
+                if (allocatedSeats.size() == requiredSeat) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private boolean sideSeat(int requiredSeat, List<Seat> allocatedSeats) {

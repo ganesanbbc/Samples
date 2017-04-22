@@ -30,7 +30,7 @@ public class SeatAllocator implements Allocator {
 
         List<Seat> allocatedSeats = new ArrayList<>();
         if (requiredSeat == 1) {
-            if (chooseSignleSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
+            if (chooseSingleSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
         } else if (requiredSeat == 2) {
             if (sideSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
         } else if (requiredSeat == 3) {
@@ -82,7 +82,7 @@ public class SeatAllocator implements Allocator {
         return false;
     }
 
-    private boolean chooseSignleSeat(int requiredSeat, List<Seat> allocatedSeats) {
+    private boolean chooseSingleSeat(int requiredSeat, List<Seat> allocatedSeats) {
         for (List<Seat> seat : seatProvider.getSeat()) {
             for (Seat seat1 : seat) {
                 if (!seat1.isAllocated()) {

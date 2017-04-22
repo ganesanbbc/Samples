@@ -1,0 +1,10 @@
+Lean Airlines ownes plenty of planes and all of the same kind.
+Each plane has a seating capacity of 24. it is spread across 3 rows and  8 seats, Seat layout like 2-4-2
+
+Design seat allocation system and consider the follwoing rules
+1. seat 1 requires, allocate next available seat
+2. seat 2 requires, allocate Left/Right seat, if not available allocate middle
+3. seat 3 requires, allocate middle seats
+4. seat 4 requires, allocate middle seats if not follow rule 2
+5. allow max group booking 4
+

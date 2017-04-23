@@ -35,7 +35,11 @@ public class SeatAllocator implements Allocator {
         if (requiredSeat == 1) {
             if (chooseSingleSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
         } else if (requiredSeat == 2) {
-            if (chooseSideSeats(requiredSeat, allocatedSeats)) return allocatedSeats;
+            if (chooseSideSeats(requiredSeat, allocatedSeats)){
+                return allocatedSeats;
+            }else{
+                if (allocateMiddleSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
+            }
         } else if (requiredSeat == 3) {
             if (allocateMiddleSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
 

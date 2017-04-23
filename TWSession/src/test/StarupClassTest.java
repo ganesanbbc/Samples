@@ -149,6 +149,7 @@ class StarupClassTest {
         assertThat(actual, is(expectedSeat));
     }
 
+
     @Test
     void thatBookedSpecified2SeatWhenPassing2SeatLocation() {
 
@@ -168,5 +169,32 @@ class StarupClassTest {
         assertThat(actual2, is(expectedSeat2));
     }
 
+
+    @Test
+    void thatBookMiddleSeatsWhenSideSeatNotAvailable(){
+        seatRequired = new ArrayList() {
+            {
+                add("R1A");
+                add("R1B");
+                add("R1G");
+                add("R1H");
+                add("R2A");
+                add("R2B");
+                add("R2G");
+                add("R2H");
+                add("R3A");
+                add("R3B");
+                add("R3G");
+                add("R3H");
+            }
+        };
+        airLineBooking.allocateSeat(2, seatRequired);
+        airLineBooking.allocateSeat(2, null);
+
+        String expectedSeat1 = "R1C";
+        String expectedSeat2 = "R1D";
+        assertThat(mSeats.get(0).getName(), is(expectedSeat1));
+        assertThat(mSeats.get(1).getName(), is(expectedSeat2));
+    }
 
 }

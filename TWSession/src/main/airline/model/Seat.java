@@ -1,9 +1,10 @@
 package main.airline.model;
 
 public class Seat {
-    boolean isAllocated;
+
     String name;
     String seatType;
+    boolean isAllocated;
 
     public Seat() {
     }

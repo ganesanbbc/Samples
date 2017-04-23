@@ -26,18 +26,38 @@ public class SeatAllocator implements Allocator {
     }
 
     @Override
-    public List<Seat> allocateSeat(int requiredSeat) {
+    public List<Seat> allocateSeat(int requiredSeat, List<String> seatRequired) {
 
         List<Seat> allocatedSeats = new ArrayList<>();
+
+        if (bookSepecifiedSeats(requiredSeat, seatRequired, allocatedSeats)) return allocatedSeats;
+
         if (requiredSeat == 1) {
             if (chooseSingleSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
         } else if (requiredSeat == 2) {
-            if (sideSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
+            if (chooseSideSeats(requiredSeat, allocatedSeats)) return allocatedSeats;
         } else if (requiredSeat == 3) {
             if (allocateMiddleSeat(requiredSeat, allocatedSeats)) return allocatedSeats;
 
         }
         return allocatedSeats;
+    }
+
+    private boolean bookSepecifiedSeats(int requiredSeat, List<String> seatRequired, List<Seat> allocatedSeats) {
+        if (seatRequired != null) {
+            for (List<Seat> seats : seatProvider.getSeat())
+                for (Seat seat : seats)
+                    if (seatRequired.contains(seat.getName()) && !seat.isAllocated()) {
+                        seat.setAllocated(true);
+                        allocatedSeats.add(seat);
+                    }
+
+            if (allocatedSeats.size() == requiredSeat) {
+                return true;
+            }
+            allocatedSeats.clear();
+        }
+        return false;
     }
 
     private boolean allocateMiddleSeat(int requiredSeat, List<Seat> allocatedSeats) {
@@ -58,7 +78,7 @@ public class SeatAllocator implements Allocator {
         return false;
     }
 
-    private boolean sideSeat(int requiredSeat, List<Seat> allocatedSeats) {
+    private boolean chooseSideSeats(int requiredSeat, List<Seat> allocatedSeats) {
         for (List<Seat> seat : seatProvider.getSeat()) {
             for (int i = 0; i < seat.size(); i++) {
                 Seat seat1 = seat.get(i);

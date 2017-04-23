@@ -7,6 +7,7 @@ import main.airline.model.Seat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -20,6 +21,7 @@ class StarupClassTest {
     public int mAvailableSeats;
     private List<Seat> mSeats;
     private AirLineBooking airLineBooking;
+    private List<String> seatRequired = null;
 
     @BeforeEach
     void setUp() {
@@ -74,14 +76,14 @@ class StarupClassTest {
     @Test
     void thatBookOneSeatWhenRequestingOneSeat() {
         int requiredSeat = 1;
-        airLineBooking.allocateSeat(requiredSeat);
+        airLineBooking.allocateSeat(requiredSeat, seatRequired);
         assertThat(requiredSeat, is(mSeats.size()));
     }
 
     @Test
     void thatBookedTwoSideSeatWhenRequestingTwoSeats() {
         int requiredSeat = 2;
-        airLineBooking.allocateSeat(requiredSeat);
+        airLineBooking.allocateSeat(requiredSeat, seatRequired);
         boolean actual = true;
         assertThat(actual, is(mSeats.get(0).isSideSeat()));
         assertThat(actual, is(mSeats.get(1).isSideSeat()));
@@ -90,9 +92,9 @@ class StarupClassTest {
 
     @Test
     void thatBookedAvailableConsequentlyTwoSideSeatWhenRequestingTwoSeats() {
-        airLineBooking.allocateSeat(1);
+        airLineBooking.allocateSeat(1, seatRequired);
         int requiredSeat = 2;
-        airLineBooking.allocateSeat(requiredSeat);
+        airLineBooking.allocateSeat(requiredSeat, seatRequired);
         boolean actual = true;
         assertThat(actual, is(mSeats.get(0).isSideSeat()));
         assertThat(actual, is(mSeats.get(1).isSideSeat()));
@@ -102,9 +104,9 @@ class StarupClassTest {
     void thatBookedNextAvailableConsequentlyTwoSideSeatFromRightSideWhenRequestingTwoSeats() {
         int requiredSeat = 2;
         for (int i = 0; i < 7; i++) {
-            airLineBooking.allocateSeat(1);
+            airLineBooking.allocateSeat(1, seatRequired);
         }
-        airLineBooking.allocateSeat(requiredSeat);
+        airLineBooking.allocateSeat(requiredSeat, seatRequired);
         assertThat(mSeats.get(0).getName(), is("R2A"));
         assertThat(mSeats.get(1).getName(), is("R2B"));
     }
@@ -113,9 +115,9 @@ class StarupClassTest {
     void thatBookedNextAvailableConsequentlyTwoSideSeatFromLeftSideWhenRequestingTwoSeats() {
         int requiredSeat = 2;
         for (int i = 0; i < 9; i++) {
-            airLineBooking.allocateSeat(1);
+            airLineBooking.allocateSeat(1, seatRequired);
         }
-        airLineBooking.allocateSeat(requiredSeat);
+        airLineBooking.allocateSeat(requiredSeat, seatRequired);
         assertThat(mSeats.get(0).getName(), is("R2G"));
         assertThat(mSeats.get(1).getName(), is("R2H"));
     }
@@ -123,13 +125,47 @@ class StarupClassTest {
     @Test
     void thatBookedMiddle3SideSeatWhenRequesting3Seats() {
         int requiredSeat = 3;
-        airLineBooking.allocateSeat(1);
-        airLineBooking.allocateSeat(1);
-        airLineBooking.allocateSeat(1);
-        airLineBooking.allocateSeat(requiredSeat);
+        airLineBooking.allocateSeat(1, seatRequired);
+        airLineBooking.allocateSeat(1, seatRequired);
+        airLineBooking.allocateSeat(1, seatRequired);
+        airLineBooking.allocateSeat(requiredSeat, seatRequired);
 
-        System.out.println(mSeats);
         assertThat(mSeats.size(), is(requiredSeat));
+    }
+
+
+    @Test
+    void thatBookedSpecifiedSeatWhenPassingSeatLocation() {
+
+        final String expectedSeat = "R1B";
+        seatRequired = new ArrayList() {
+            {
+                add(expectedSeat);
+            }
+        };
+
+        airLineBooking.allocateSeat(1, seatRequired);
+        String actual = mSeats.get(0).getName();
+        assertThat(actual, is(expectedSeat));
+    }
+
+    @Test
+    void thatBookedSpecified2SeatWhenPassing2SeatLocation() {
+
+        final String expectedSeat1 = "R1B";
+        final String expectedSeat2 = "R2B";
+        seatRequired = new ArrayList() {
+            {
+                add(expectedSeat1);
+                add(expectedSeat2);
+            }
+        };
+
+        airLineBooking.allocateSeat(2, seatRequired);
+        String actual1 = mSeats.get(0).getName();
+        String actual2 = mSeats.get(1).getName();
+        assertThat(actual1, is(expectedSeat1));
+        assertThat(actual2, is(expectedSeat2));
     }
 
 

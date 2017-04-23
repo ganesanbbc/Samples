@@ -19,8 +19,8 @@ public class AirLineBookingImpl implements main.airline.AirLineBooking {
 
 
     @Override
-    public void allocateSeat(int requiredSeat) {
-        airLineBookingImplCallback.seatBooking(seatAllocator.allocateSeat(requiredSeat));
+    public void allocateSeat(int requiredSeat, List<String> seatRequired) {
+        airLineBookingImplCallback.seatBooking(seatAllocator.allocateSeat(requiredSeat,seatRequired));
     }
 
     @Override
